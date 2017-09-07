@@ -1,0 +1,12 @@
+<ion-content padding="true">
+	<div class="wbox" style="padding:30px;">
+		<h1 style="text-align:center;">{{title}}</h1>
+		<ion-list style="">
+			<label class="item item-input">
+				<input type="text" id="code" ng-model="user.code" placeholder="Verification code">
+			</label>
+		</ion-list>
+		<div style="height: 40px;" class="spacer"></div>
+		<button class="button button-stable button-block" id="verify-button" ng-click="verify(user)">SEND</button>
+	</div>
+</ion-content>

@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "933760272392",
+    "firebase_url": "https://do-me-now.firebaseio.com",
+    "project_id": "do-me-now",
+    "storage_bucket": "do-me-now.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933760272392:android:6f24e72d848bcf4f",
+        "android_client_info": {
+          "package_name": "com.dri.dome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "933760272392-g6cje2bbvqccusnd8s3hvv6kl0lvi89n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiILF-KLFly06Bqi7iM2-8Pvg8APlwkbo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933760272392:android:7434c1807fe53b6a",
+        "android_client_info": {
+          "package_name": "com.ibm.mobilefirstplatform.clientsdk.android.push"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "933760272392-g6cje2bbvqccusnd8s3hvv6kl0lvi89n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiILF-KLFly06Bqi7iM2-8Pvg8APlwkbo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

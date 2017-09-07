@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Security-Policy">
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		<title>Dri lists</title>
+		<!-- favicon -->
+		<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+
+		<link rel="manifest" href="manifest.json">
+
+		<!-- un-comment this code to enable service worker
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(() => console.log('service worker installed'))
+          .catch(err => console.log('Error', err));
+      }
+    </script>-->
+
+		<link href="lib/ionic/css/ionic.css" rel="stylesheet" />
+		<link href="lib/angular-loading/angular-loading.css" rel="stylesheet" />
+		<link href="css/style.css" rel="stylesheet" />
+    <link href="css/angular-timezone-selector.css" rel="stylesheet" />
+    <link href="css/ion-datetime-picker.min.css" rel="stylesheet" />
+    
+		<!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+    <!-- jquery min.js library -->
+    <script src="lib/jquery-1.12.3.min.js"></script>
+
+		<!-- ionic/angularjs js -->
+		<script src="lib/ionic/js/ionic.bundle.js"></script>
+
+		<!-- cordova script (this will be a 404 during development) -->
+		<script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
+		<script src="cordova.js"></script>
+		<!-- jQuery js -->
+    <script src="lib/moment.min.js"></script>
+    <script src='lib/timzone_selector/moment-timezone-with-data.js'></script>
+    <script src='lib/timzone_selector/chosen.jquery.min.js'></script>
+    <script src='lib/timzone_selector/lodash.min.js'></script>
+    <script src='lib/timzone_selector/angular-timezone-selector.js'></script>
+		<script src="lib/node-red-socket.io.js"></script>
+		<script src="lib/angular-socket-io/socket.min.js"></script>
+		<script src="lib/angular-touch.js"></script>
+    <script src="lib/ngTouchstart.js"></script>
+		<script src="lib/item-swipe-pane-directive.js"></script>
+		<script src="lib/ngstorage/ngStorage.min.js"></script>
+		<script src="lib/pouchdb/dist/pouchdb.min.js"></script>
+		<script src="lib/spin.js"></script>
+		<script src="lib/angular-loading/angular-loading.js"></script>
+    <script src="lib/angular.moment.min.js"></script>
+    <script src="lib/character_count.js"></script>
+    <script src="lib/ion-datetime-picker.js"></script>
+    
+  
+		<!-- your app's js -->
+		<script src="js/app.js"></script>
+		<script src="js/controllers.js"></script>
+		<script src="js/routes.js"></script>
+		<script src="js/services.js"></script>
+		<script src="js/directives.js"></script>
+		<script src="js/factories.js"></script>
+		<script src="js/local-data.js"></script>
+    <script src="js/local-db.js"></script>
+    <script src="js/semi-realtime.js"></script>
+	</head>
+
+	<body ng-app="DomenowApp" ng-controller="TodoCtrl" class="platform-android platform-cordova platform-webview">
+		<div id="page-wrapper" dw-loading="loading" dw-loading-options="">
+			<ion-view dynamic="html" id="page{{page_id}}" title="{{title}}"></ion-view>
+		</div>
+	</body>
+
+</html>

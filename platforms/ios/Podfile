@@ -1,0 +1,8 @@
+platform :ios, '8.0'
+use_frameworks!
+target 'Domenow' do
+	pod 'BMSAnalytics', '~>2.0'
+	pod 'BMSSecurity', '~>2.0'
+	pod 'BMSCore', '~>2.3'
+	pod 'BMSPush', '~>3.2'
+end

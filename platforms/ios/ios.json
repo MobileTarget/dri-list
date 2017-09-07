@@ -1,0 +1,249 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"BMSClient\"><param name=\"ios-package\" value=\"CDVBMSClient\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BMSRequest\"><param name=\"ios-package\" value=\"CDVBMSRequest\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BMSLogger\"><param name=\"ios-package\" value=\"CDVBMSLogger\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BMSAnalytics\"><param name=\"ios-package\" value=\"CDVBMSAnalytics\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BMSAuthorizationManager\"><param name=\"ios-package\" value=\"CDVBMSAuthorizationManager\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BMSAuthenticationContext\"><param name=\"ios-package\" value=\"CDVBMSAuthenticationContext\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"BMSPushClient\"><param name=\"ios-package\" value=\"CDVBMSPush\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Console\"><param name=\"ios-package\" value=\"CDVLogger\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Device\"><param name=\"ios-package\" value=\"CDVDevice\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"ios-package\" value=\"CDVNotification\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"InAppBrowser\"><param name=\"ios-package\" value=\"CDVInAppBrowser\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SplashScreen\"><param name=\"ios-package\" value=\"CDVSplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"StatusBar\"><param name=\"ios-package\" value=\"CDVStatusBar\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"StatusBarOverlaysWebView\" value=\"true\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"StatusBarStyle\" value=\"lightcontent\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"IonicKeyboard\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "cordova-plugin-cocoapod-support": {
+            "PACKAGE_NAME": "com.dri.dome"
+        },
+        "cordova-plugin-add-swift-support": {
+            "PACKAGE_NAME": "com.dri.dome"
+        },
+        "bms-core": {
+            "PACKAGE_NAME": "com.dri.dome"
+        },
+        "bms-push": {
+            "PACKAGE_NAME": "com.dri.dome"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.dri.dome"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.dri.dome"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.dri.dome"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.dri.dome"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.dri.dome"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.dri.dome"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.dri.dome"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.dri.dome"
+        }
+    },
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "file": "plugins/bms-core/www/BMSClient.js",
+            "id": "bms-core.BMSClient",
+            "pluginId": "bms-core",
+            "clobbers": [
+                "BMSClient"
+            ]
+        },
+        {
+            "file": "plugins/bms-core/www/BMSRequest.js",
+            "id": "bms-core.BMSRequest",
+            "pluginId": "bms-core",
+            "clobbers": [
+                "BMSRequest"
+            ]
+        },
+        {
+            "file": "plugins/bms-core/www/BMSLogger.js",
+            "id": "bms-core.BMSLogger",
+            "pluginId": "bms-core",
+            "clobbers": [
+                "BMSLogger"
+            ]
+        },
+        {
+            "file": "plugins/bms-core/www/BMSAnalytics.js",
+            "id": "bms-core.BMSAnalytics",
+            "pluginId": "bms-core",
+            "clobbers": [
+                "BMSAnalytics"
+            ]
+        },
+        {
+            "file": "plugins/bms-core/www/BMSAuthorizationManager.js",
+            "id": "bms-core.BMSAuthorizationManager",
+            "pluginId": "bms-core",
+            "clobbers": [
+                "BMSAuthorizationManager"
+            ]
+        },
+        {
+            "file": "plugins/bms-push/www/BMSPush.js",
+            "id": "bms-push.BMSPush",
+            "pluginId": "bms-push",
+            "clobbers": [
+                "BMSPush"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-console/www/console-via-logger.js",
+            "id": "cordova-plugin-console.console",
+            "pluginId": "cordova-plugin-console",
+            "clobbers": [
+                "console"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-console/www/logger.js",
+            "id": "cordova-plugin-console.logger",
+            "pluginId": "cordova-plugin-console",
+            "clobbers": [
+                "cordova.logger"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-device/www/device.js",
+            "id": "cordova-plugin-device.device",
+            "pluginId": "cordova-plugin-device",
+            "clobbers": [
+                "device"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+            "id": "cordova-plugin-dialogs.notification",
+            "pluginId": "cordova-plugin-dialogs",
+            "merges": [
+                "navigator.notification"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+            "id": "cordova-plugin-inappbrowser.inappbrowser",
+            "pluginId": "cordova-plugin-inappbrowser",
+            "clobbers": [
+                "cordova.InAppBrowser.open",
+                "window.open"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+            "id": "cordova-plugin-splashscreen.SplashScreen",
+            "pluginId": "cordova-plugin-splashscreen",
+            "clobbers": [
+                "navigator.splashscreen"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+            "id": "cordova-plugin-statusbar.statusbar",
+            "pluginId": "cordova-plugin-statusbar",
+            "clobbers": [
+                "window.StatusBar"
+            ]
+        },
+        {
+            "file": "plugins/ionic-plugin-keyboard/www/ios/keyboard.js",
+            "id": "ionic-plugin-keyboard.keyboard",
+            "pluginId": "ionic-plugin-keyboard",
+            "clobbers": [
+                "cordova.plugins.Keyboard"
+            ],
+            "runs": true
+        }
+    ],
+    "plugin_metadata": {
+        "cordova-plugin-cocoapod-support": "1.2.10",
+        "cordova-plugin-add-swift-support": "1.6.2",
+        "bms-core": "2.3.8",
+        "bms-push": "3.2.0",
+        "cordova-plugin-console": "1.0.7",
+        "cordova-plugin-device": "1.1.4",
+        "cordova-plugin-dialogs": "1.3.3",
+        "cordova-plugin-inappbrowser": "1.7.1",
+        "cordova-plugin-splashscreen": "4.0.3",
+        "cordova-plugin-statusbar": "2.2.1",
+        "cordova-plugin-whitelist": "1.3.1",
+        "ionic-plugin-keyboard": "2.2.1"
+    }
+}

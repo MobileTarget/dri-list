@@ -1,0 +1,92 @@
+<ion-header-bar class="bar-stable">
+	<button class="button button-icon" ng-click="logout()">
+	   <i class="icon ion-log-out"></i>
+	</button>
+	<h1 class="title">{{title}}</h1>
+	<div class="buttons">
+		<button class="button button-icon" ng-click="editUser()">
+		  <i class="icon ion-person"></i>
+		</button>
+		<button class="button button-icon" ng-click="sortDetail()">
+		  <i ng:class="(sort.order=='desc')?'icon ion-arrow-up-c':'icon ion-arrow-down-c'"></i>
+		</button>
+	</div>
+</ion-header-bar>
+
+<ion-content class="has-header">
+	<ion-list style="">
+		<ion-item ng-repeat="item in details" type="item-text-wrap"
+			class="item-remove-animate item-icon-right">
+		  <div class="item-data" ng-click="subDetails(item)">
+			  <h2>{{item.name}}</h2>
+			  <i class="icon ion-chevron-right icon-accessory">
+				<span class="badge badge-assertive icon-badge">{{item.active}} / {{item.unread}}</span>
+			  </i>
+		  </div>
+		  <item-swipe-pane class="left-pane">
+			<button class="button button-calm" ng-click="editDetails(item)">
+				<div class="two-line-btn">
+					<ion-icon class="ion-edit"></ion-icon>
+					<label>Edit</label>
+				</div>
+			</button>
+			<button class="button button-assertive"
+					ng-click="params = {
+						api_type:	'delete_detail',
+						table:		'delete_detail',
+						table_data:	{
+							id:	item.id
+						}
+					};
+					common_request_handler(params);">
+				<div class="two-line-btn">
+					<ion-icon class="ion-trash-a"></ion-icon>
+					<label>Delete</label>
+				</div>
+			</button>
+			<button class="button button-balanced" ng-click="moreDetails(item)" ng-show="isAdmin">
+				<div class="two-line-btn">
+					<ion-icon class="ion-more"></ion-icon>
+					<label>More</label>
+				</div>
+			</button>
+			<button class="button button-positive"
+					ng-click="params = {
+						api_type:	'URL',
+						url:		'http://www.dri.com/'
+					};
+					common_request_handler(params);">
+				<div class="two-line-btn">
+					<ion-icon class="ion-ios-arrow-forward"></ion-icon>
+					<label>Open Url</label>
+				</div>
+			</button>
+		  </item-swipe-pane>
+		</ion-item>
+	</ion-list>
+</ion-content>
+
+<ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
+	<form name="sendMessageForm" class="sendmessage"
+		ng-submit="api_url = 'https://platform.mybluemix.net/add_detail'; 
+					params = {
+						api_url:	api_url,
+						api_mode:   'get',
+						api_type:	'add_detail',
+						api_next_fn: '$scope.process_handler(\'param\')',
+						note:		data.message,
+						task_name:	config.task_name,
+						page_id:	config.page_id,
+						from_page_id: config.from_page_id
+					};
+					common_request_handler(params)">
+		<label class="item-input-wrapper">
+			<input type="text" placeholder="New Category" ng-model="data.message" ng-change="updateTyping()" on-return="closeKeyboard()" on-focus="inputUp()" on-blur="inputDown()" />
+		</label>
+		<div class="footer-btn-wrap">
+			<button type="submit" class="button footer-btn"
+				ng-disabled="!data.message">Submit
+			</button>
+		</div>
+	</form>
+</ion-footer-bar>
