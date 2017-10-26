@@ -4,7 +4,7 @@ PODS:
   - BMSAnalyticsAPI (2.2.1)
   - BMSCore (2.3.2):
     - BMSAnalyticsAPI (~> 2.2)
-  - BMSPush (3.2.2):
+  - BMSPush (3.2.4):
     - BMSCore (~> 2.0)
   - BMSSecurity (2.0.10):
     - BMSCore (~> 2.2)
@@ -19,9 +19,9 @@ SPEC CHECKSUMS:
   BMSAnalytics: 58ceebea7d929db5811b9e3c51282480b39622c2
   BMSAnalyticsAPI: 2e07dee6452e3cdbdc5fd0ee7362b66a281e3963
   BMSCore: 30674d30566134125e9bee043ccbea652445ca92
-  BMSPush: 491ac7ca80bf9f4e6be8a664f2525d72dd047be3
+  BMSPush: 8436b2d9bec00d1ace95aa6b0bec320a2d95b822
   BMSSecurity: c2d11d11e8b56442c91928f4f73a48788933e6f3
 
-PODFILE CHECKSUM: 08d03cb40a2cfc084663dc5083d007f3c752f8e8
+PODFILE CHECKSUM: 97c8f03c909e22457d428238d4346c68a69dc4b1
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.4.0.beta.1

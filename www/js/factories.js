@@ -580,3 +580,8 @@ DomenowApp.factory('STATIC_PAGES', function ($localStorage) {
 		}
 	};
 });
+
+DomenowApp.factory('Client', ['$window', function($window){
+  var client = new $window.ClientJS();
+  return client;
+}]);

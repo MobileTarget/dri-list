@@ -1,0 +1,8 @@
+<div class="user-msg-container">
+  <div ng-repeat="message in userMessageCtrl.messages track by $index" ng-class="userMessageCtrl.checkClass(message);" class="messages" ng-if="userMessageCtrl.futureMessage(message);">
+      <div class="message" >
+        <span >{{ ::message.message }}</span>
+        <div class="datetime" am-time-ago="message.date_created"></div>
+      </div>
+  </div>
+</div>

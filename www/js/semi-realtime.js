@@ -3,9 +3,9 @@
   
   DomenowApp.service('SEMI_REALTIME_CHANGES', SemiRealTimeChangesMethod);
   
-  SemiRealTimeChangesMethod.$inject = ['LOCAL_DB', '$http', 'utilityService', '$localStorage'];
+  SemiRealTimeChangesMethod.$inject = ['LOCAL_DB', '$http', 'utilityService', 'SocketBroadCastEvents', '$localStorage'];
   
-  function SemiRealTimeChangesMethod(LOCAL_DB, $http, utilityService){
+  function SemiRealTimeChangesMethod(LOCAL_DB, $http, utilityService, SocketBroadCastEvents, $localStorage){
     var self = this ;
     
     /**
@@ -13,7 +13,6 @@
      **/
     self.RemoveItemFromDB = function(){
       LOCAL_DB.SaveData("APP_LOCAL_USER_TASK", []);
-      LOCAL_DB.SaveData("APP_LOCAL_PAGES", []);
       return true;
     };
      /**
@@ -34,16 +33,15 @@
      *  and by doing like this I'm reducing memory expansion of local_db.
      **/
     self.IsLocalUserTaskExists = function(){
-      return LOCAL_DB.GetData("APP_LOCAL_USER_TASK");
+      return LOCAL_DB.GetTask("APP_LOCAL_USER_TASK");
     };
     
     /**
      *  Check if request user_task is exits in database or not ?
      **/
-    self.isUserTaskExistsInLocalDb = function(page_id, user_task, task_id){
-      var saved_user_task = LOCAL_DB.GetData("APP_LOCAL_USER_TASK"),
+    self.isUserTaskExistsInLocalDb = function(page_id, user_id, task_id){
+      var saved_user_task = LOCAL_DB.GetTask("APP_LOCAL_USER_TASK"),
           local_user_task = {};
-
       angular.forEach(saved_user_task, function(user_task){
         if(
           (page_id == user_task.page_id)  &&
@@ -63,18 +61,17 @@
     /**
      *  check is pageExists in local_db with respect to page_id
      **/
-    self.isPageExistsInLocalDb = function(page_id){
-      var saved_pages = LOCAL_DB.GetData("APP_LOCAL_PAGES"),
-          local_pages = {};
-      angular.forEach(saved_pages, function(page){
-        if(page.page_id == page_id){
-          local_pages = page;
+    self.isPageExistsInLocalDb = function(page_id, callback){
+      LOCAL_DB.GetData(page_id, function(err, saved_pages){
+        if(err) {
+          callback(err, null);
+        }else{
+          callback(null, {
+            isExists    : !utilityService.isEmpty(saved_pages),
+            local_pages : saved_pages
+          });
         }
       });
-      return {
-        isExists    : !utilityService.isEmpty(local_pages),
-        local_pages : local_pages
-      };
     };
     
     /**
@@ -83,16 +80,11 @@
      **/
     self.StoreDataToLocalDb = function(server_data){ 
       if(!utilityService.isEmpty(server_data)){
-        var saved_pages     = LOCAL_DB.GetData("APP_LOCAL_PAGES"),
-            local_user_task = LOCAL_DB.GetData("APP_LOCAL_USER_TASK");
-            
-        if(utilityService.isEmpty(saved_pages)) saved_pages = [];
-        if(utilityService.isEmpty(saved_pages)) local_user_task =[];
         
-        var isPage      = self.isPageExistsInLocalDb(server_data.page_id) ,
-            isUserTask  = self.isUserTaskExistsInLocalDb(server_data.page_id);
-            
-        if( !(isPage.isExists) ) saved_pages.push(server_data);
+        var local_user_task = LOCAL_DB.GetTask("APP_LOCAL_USER_TASK");
+        if(utilityService.isEmpty(local_user_task)) local_user_task =[];
+        
+        var isUserTask  = self.isUserTaskExistsInLocalDb(server_data.page_id, server_data.user_id, server_data.task_id);
         if( !(isUserTask.isExists)) {
           local_user_task.push({
             task_id 		    : server_data.task.task_id || 0,
@@ -105,8 +97,9 @@
             unread          : 1 
           });
         }
-        LOCAL_DB.SaveData("APP_LOCAL_PAGES", saved_pages);
+        LOCAL_DB.SavePages(server_data);                         
         LOCAL_DB.SaveData("APP_LOCAL_USER_TASK", local_user_task);
+        return true;
       }else{
         console.warn("Exception raised while saving data to local_db.", server_data);
       }
@@ -120,47 +113,54 @@
     
     self.StorePagesToLocalDb = function(server_pages){
       if(!utilityService.isEmpty(server_pages)){
-        var saved_pages     = LOCAL_DB.GetData("APP_LOCAL_PAGES"),
-            new_local_pages = [], new_user_task = [];
-            
-        if(utilityService.isEmpty(saved_pages)) saved_pages = [];
-        angular.forEach(saved_pages, function(local_page){
-          angular.forEach(server_pages, function(server_page){
-            if(local_page.page_id == server_page.page_id){
-              new_local_pages.push(server_page);
-              new_user_task.push({
-                task_id 		    : server_pages.task.task_id || 0,
-                user_id			    : server_pages.user._id     || 0,
-                page_id         : server_pages.page_id,
-                synchronized    : 1,
-                status          : 1,
-                date_updated    : new Date().getTime(),
-                ancestors       : [],
-                unread          : 1 
-              });
-            }else{
-              new_local_pages.push(local_page); 
-            }
-          });
+        var new_local_pages = [], new_user_task = [];
+        angular.forEach(server_pages, function(server_page){
+            new_local_pages.push(server_page);
+            new_user_task.push({
+              task_id 		    : server_page.task.task_id || 0,
+              user_id			    : server_page.user._id     || 0,
+              page_id         : server_page.page_id,
+              synchronized    : 1,
+              status          : 1,
+              date_updated    : new Date().getTime(),
+              ancestors       : [],
+              unread          : 1 
+            });
         });
-        LOCAL_DB.SaveData("APP_LOCAL_PAGES", new_local_pages);
+        LOCAL_DB.SavePages(new_local_pages);
         LOCAL_DB.SaveData("APP_LOCAL_USER_TASK", new_user_task);
-      }else{
-        console.warn("Exception raised while saving data to local_db.", server_pages);
       }
     };
     
     self.UpdateLocalDbPages = function(page_id){
-      var local_pages     = LOCAL_DB.GetData("APP_LOCAL_PAGES"),
-          updated_pages   = [];
-      
-      angular.forEach(local_pages, function(pages){
-        if(pages.page_id !== page_id){
-          updated_pages.push(pages);
-        }
-      });
-      
-      LOCAL_DB.SaveData("APP_LOCAL_PAGES", updated_pages);
+      LOCAL_DB.RemoveByKey(page_id);
+      return true;
+    };
+    
+    self.SaveAllPages = function(obj,page_data){
+      LOCAL_DB.SaveData("NEW_PAGES", page_data);
+      self.StorePagesToLocalDb(page_data);
+      SocketBroadCastEvents.sendNewPagesToWebSocketServer(obj.user_id, page_data);
+    };
+    
+    self.logout = function(){
+      var phone = $localStorage.logged_user_phone ;
+      LOCAL_DB.ClearAll();
+      setTimeout(function(){
+        $localStorage.logged_user_phone = phone;
+      }, 200);
+      return true;
+    };
+    
+    self.updateLocalPagesWithServer = function(page_arr){
+      if( utilityService.isEmpty(page_arr) ){
+        console.warn("Cannot remove pages from Local_db due to undefined||null page_arr", page_arr);
+      }else{
+        angular.forEach(page_arr, function(page_id){
+          LOCAL_DB.RemoveByKey(page_id);
+        });
+        console.info("Request pages were removed from local_db to get serverPages", page_arr);
+      }
     };
   }
 })(angular, DomenowApp);

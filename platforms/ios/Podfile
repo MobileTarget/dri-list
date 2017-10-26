@@ -1,6 +1,6 @@
 platform :ios, '8.0'
 use_frameworks!
-target 'Domenow' do
+target 'Drilist' do
 	pod 'BMSAnalytics', '~>2.0'
 	pod 'BMSSecurity', '~>2.0'
 	pod 'BMSCore', '~>2.3'

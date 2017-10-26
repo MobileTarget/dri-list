@@ -9,7 +9,7 @@
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.1
+ * Ionic, v1.3.3
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -25,7 +25,7 @@
 // build processes may have already created an ionic obj
 window.ionic = window.ionic || {};
 window.ionic.views = {};
-window.ionic.version = '1.3.1';
+window.ionic.version = '1.3.3';
 
 (function (ionic) {
 
@@ -2397,7 +2397,7 @@ window.ionic.version = '1.3.1';
     /**
      * @ngdoc method
      * @name ionic.Platform#showStatusBar
-     * @description Shows or hides the device status bar (in Cordova). Requires `cordova plugin add org.apache.cordova.statusbar`
+     * @description Shows or hides the device status bar (in Cordova). Requires `ionic plugin add cordova-plugin-statusbar`
      * @param {boolean} shouldShow Whether or not to show the status bar.
      */
     showStatusBar: function(val) {
@@ -2424,7 +2424,7 @@ window.ionic.version = '1.3.1';
      * @name ionic.Platform#fullScreen
      * @description
      * Sets whether the app is fullscreen or not (in Cordova).
-     * @param {boolean=} showFullScreen Whether or not to set the app to fullscreen. Defaults to true. Requires `cordova plugin add org.apache.cordova.statusbar`
+     * @param {boolean=} showFullScreen Whether or not to set the app to fullscreen. Defaults to true. Requires `ionic plugin add cordova-plugin-statusbar`
      * @param {boolean=} showStatusBar Whether or not to show the device's status bar. Defaults to false.
      */
     fullScreen: function(showFullScreen, showStatusBar) {
@@ -2673,7 +2673,7 @@ window.ionic.version = '1.3.1';
  * - Works with labels surrounding inputs
  * - Does not fire off a click if the user moves the pointer too far
  * - Adds and removes an 'activated' css class
- * - Multiple [unit tests](https://github.com/driftyco/ionic/blob/master/test/unit/utils/tap.unit.js) for each scenario
+ * - Multiple [unit tests](https://github.com/driftyco/ionic/blob/1.x/test/unit/utils/tap.unit.js) for each scenario
  *
  */
 /*
@@ -2984,7 +2984,7 @@ function tapMouseDown(e) {
     e.stopPropagation();
 
     if (!ionic.Platform.isEdge() && (!ionic.tap.isTextInput(e.target) || tapLastTouchTarget !== e.target) &&
-      !isSelectOrOption(e.target.tagName) && !ionic.tap.isVideo(e.target)) {
+      !isSelectOrOption(e.target.tagName) && !e.target.isContentEditable && !ionic.tap.isVideo(e.target)) {
       // If you preventDefault on a text input then you cannot move its text caret/cursor.
       // Allow through only the text input default. However, without preventDefault on an
       // input the 300ms delay can change focus on inputs after the keyboard shows up.
@@ -3105,6 +3105,10 @@ function tapIgnoreEvent(e) {
   e.isTapHandled = true;
 
   if(ionic.tap.isElementTapDisabled(e.target)) {
+    return true;
+  }
+
+  if(e.target.tagName == 'SELECT') {
     return true;
   }
 
@@ -7008,6 +7012,8 @@ ionic.scroll = {
 
       if(options.startY >= 0 || options.startX >= 0) {
         ionic.requestAnimationFrame(function() {
+          self.__originalContainerHeight = self.el.getBoundingClientRect().height;
+
           self.el.scrollTop = options.startY || 0;
           self.el.scrollLeft = options.startX || 0;
 
@@ -7540,14 +7546,13 @@ ionic.scroll = {
       var self = this;
       var container = self.__container;
 
-      container.removeEventListener('resetScrollView', self.resetScrollView);
       container.removeEventListener('scroll', self.onScroll);
-
       container.removeEventListener('scrollChildIntoView', self.scrollChildIntoView);
-      container.removeEventListener('resetScrollView', self.resetScrollView);
 
       container.removeEventListener(ionic.EVENTS.touchstart, self.handleTouchMove);
       container.removeEventListener(ionic.EVENTS.touchmove, self.handleTouchMove);
+
+      document.removeEventListener('resetScrollView', self.resetScrollView);
 
       ionic.tap.removeClonedInputs(container, self);
 
@@ -7575,9 +7580,6 @@ ionic.scroll = {
   var ITEM_PLACEHOLDER_CLASS = 'item-placeholder';
   var ITEM_REORDERING_CLASS = 'item-reordering';
   var ITEM_REORDER_BTN_CLASS = 'item-reorder';
-  // [NEW - enable left/right swipe]
-  // direction-right is selector of left to right swipe-able container.
-  var DIRECTION_RIGHT_CLASS = 'direction-right';
 
   var DragOp = function() {};
   DragOp.prototype = {
@@ -7625,30 +7627,7 @@ ionic.scroll = {
     offsetX = parseFloat(content.style[ionic.CSS.TRANSFORM].replace('translate3d(', '').split(',')[0]) || 0;
 
     // Grab the buttons
-    // [Ionic 1.3.1]
-    // buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS);
-    // [NEW - enable left/right swipe]
-    // Grab correct pane.
-    // Starting drag from zero and going to the left (opening a pane on right
-    // side), or starting drag on left side (offsetX < 0) and going to the
-    // right (closing the pane on the right side). Grab the pane on the right
-    // side - obviously.
-    if( (e.gesture.direction === "left"  && offsetX === 0) ||
-        (e.gesture.direction === "right" && offsetX < 0) ) {
-        // Contains item-options and does not contain direction-right classes
-        buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS
-                + ':not(.' + DIRECTION_RIGHT_CLASS +')');
-
-    // Starting drag from zero and going to the right (opening a pane on left
-    // side), or starting drag on right side (offsetX > 0) and going to the
-    // left (closing the pane on the leftt side). Grab the pane on the left
-    // side.
-    } else if ( (e.gesture.direction === "right" && offsetX === 0) ||
-                (e.gesture.direction === "left"  && offsetX > 0) ) {
-        // Contains item-options and direction-right classes.
-        buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS
-                + '.' + DIRECTION_RIGHT_CLASS);
-    }
+    buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS);
     if (!buttons) {
       return;
     }
@@ -7660,10 +7639,7 @@ ionic.scroll = {
       buttons: buttons,
       buttonsWidth: buttonsWidth,
       content: content,
-      startOffsetX: offsetX,
-      // [NEW - enable left/right swipe]
-      // store direction swipe started with.
-      direction: e.gesture.direction
+      startOffsetX: offsetX
     };
   };
 
@@ -7720,19 +7696,7 @@ ionic.scroll = {
       buttonsWidth = this._currentDrag.buttonsWidth;
 
       // Grab the new X point, capping it at zero
-      // [Ionic 1.3.1]
-      // var newX = Math.min(0, this._currentDrag.startOffsetX + e.gesture.deltaX);
-      // [NEW - enable left/right swipe]
-      // Prevent drag from open position on one side to open position on other
-      // side.
-      var newX;
-      if (this._currentDrag.direction === "left"){
-          newX = Math.min(0, this._currentDrag.startOffsetX > 0 ? this._currentDrag.startOffsetX :
-                  (this._currentDrag.startOffsetX + e.gesture.deltaX) );
-      } else if (this._currentDrag.direction === "right"){
-          newX = Math.max(0, this._currentDrag.startOffsetX < 0 ? this._currentDrag.startOffsetX :
-                  (this._currentDrag.startOffsetX + e.gesture.deltaX) );
-      }
+      var newX = Math.min(0, this._currentDrag.startOffsetX + e.gesture.deltaX);
 
       // If the new X position is past the buttons, we need to slow down the drag (rubber band style)
       if (newX < -buttonsWidth) {
@@ -7758,27 +7722,7 @@ ionic.scroll = {
 
     // If we are currently dragging, we want to snap back into place
     // The final resting point X will be the width of the exposed buttons
-    // [Ionic 1.3.1]
-    // var restingPoint = -self._currentDrag.buttonsWidth;
-    // [NEW - enable left/right swipe]
-    // Resting point X depends on swipe direction.
-    var restingPoint;
-    // If pane was opened (startOffsetX > 0 or startOffsetX < 0), snap back to
-    // zero (close the pane). Otherwie resting point X is the width of the
-    // exposed pane.
-    if (e.gesture.direction === "left"){
-        if (this._currentDrag.startOffsetX > 0){
-            restingPoint = 0;
-        } else {
-            restingPoint = -self._currentDrag.buttonsWidth;
-        }
-    } else if (e.gesture.direction === "right"){
-        if (this._currentDrag.startOffsetX < 0){
-            restingPoint = 0;
-        } else {
-            restingPoint = self._currentDrag.buttonsWidth;
-        }
-    }
+    var restingPoint = -self._currentDrag.buttonsWidth;
 
     // Check if the drag didn't clear the buttons mid-point
     // and we aren't moving fast enough to swipe open
@@ -7787,10 +7731,8 @@ ionic.scroll = {
       // If we are going left but too slow, or going right, go back to resting
       if (e.gesture.direction == "left" && Math.abs(e.gesture.velocityX) < 0.3) {
         restingPoint = 0;
-      // [Ionic 1.3.1]
-      // } else if (e.gesture.direction == "right") {
-      // [NEW - enable left/right swipe]
-      } else if (e.gesture.direction == "right" && Math.abs(e.gesture.velocityX) < 0.3) {
+
+      } else if (e.gesture.direction == "right") {
         restingPoint = 0;
       }
 
@@ -53243,7 +53185,7 @@ angular.module('ui.router.state')
  * Copyright 2015 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.3.1
+ * Ionic, v1.3.3
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -54143,7 +54085,7 @@ function($rootScope, $state, $location, $window, $timeout, $ionicViewSwitcher, $
           var viewIds = Object.keys(viewHistory.views);
           viewIds.forEach(function(viewId) {
             var view = viewHistory.views[viewId];
-            if ( view.backViewId === switchToView.viewId ) {
+            if ((view.backViewId === switchToView.viewId) && (view.historyId !== switchToView.historyId)) {
               view.backViewId = null;
             }
           });
@@ -54779,7 +54721,7 @@ function($rootScope, $state, $location, $document, $ionicPlatform, $ionicHistory
  * $ionicConfigProvider.views.maxCache(10);
  * ```
  *
- * Additionally, each platform can have it's own config within the `$ionicConfigProvider.platform`
+ * Additionally, each platform can have its own config within the `$ionicConfigProvider.platform`
  * property. The config below would only apply to Android devices.
  *
  * ```js
@@ -55445,7 +55387,8 @@ var LOADING_TPL =
  * .controller('LoadingCtrl', function($scope, $ionicLoading) {
  *   $scope.show = function() {
  *     $ionicLoading.show({
- *       template: 'Loading...'
+ *       template: 'Loading...',
+ *       duration: 3000
  *     }).then(function(){
  *        console.log("The loading indicator is now displayed");
  *     });
@@ -55900,7 +55843,9 @@ function($rootScope, $ionicBody, $compile, $timeout, $ionicPlatform, $ionicTempl
       }
 
       return $timeout(function() {
-        $ionicBody.removeClass(self.viewType + '-open');
+        if (!modalStack.length) {
+          $ionicBody.removeClass(self.viewType + '-open');
+        }
         self.el.classList.add('hide');
       }, self.hideDelay || 320);
     },
@@ -56255,8 +56200,8 @@ IonicModule
          * @description
          * Add Cordova event listeners, such as `pause`, `resume`, `volumedownbutton`, `batterylow`,
          * `offline`, etc. More information about available event types can be found in
-         * [Cordova's event documentation](https://cordova.apache.org/docs/en/edge/cordova_events_events.md.html#Events).
-         * @param {string} type Cordova [event type](https://cordova.apache.org/docs/en/edge/cordova_events_events.md.html#Events).
+         * [Cordova's event documentation](https://cordova.apache.org/docs/en/latest/cordova/events/events.html).
+         * @param {string} type Cordova [event type](https://cordova.apache.org/docs/en/latest/cordova/events/events.html).
          * @param {function} callback Called when the Cordova event is fired.
          * @returns {function} Returns a deregistration function to remove the event listener.
          */
@@ -56367,7 +56312,7 @@ IonicModule
  *   $scope.$on('$destroy', function() {
  *     $scope.popover.remove();
  *   });
- *   // Execute action on hide popover
+ *   // Execute action on hidden popover
  *   $scope.$on('popover.hidden', function() {
  *     // Execute action
  *   });
@@ -61010,20 +60955,15 @@ function($scope, $attrs, $ionicSideMenuDelegate, $ionicPlatform, $ionicBody, $io
 
     self.content.setTranslateX(amount);
 
-    if (amount >= 0) {
-      leftShowing = true;
-      rightShowing = false;
+    leftShowing = amount > 0;
+    rightShowing = amount < 0;
 
-      if (amount > 0) {
-        // Push the z-index of the right menu down
-        self.right && self.right.pushDown && self.right.pushDown();
-        // Bring the z-index of the left menu up
-        self.left && self.left.bringUp && self.left.bringUp();
-      }
+    if (amount > 0) {
+      // Push the z-index of the right menu down
+      self.right && self.right.pushDown && self.right.pushDown();
+      // Bring the z-index of the left menu up
+      self.left && self.left.bringUp && self.left.bringUp();
     } else {
-      rightShowing = true;
-      leftShowing = false;
-
       // Bring the z-index of the right menu up
       self.right && self.right.bringUp && self.right.bringUp();
       // Push the z-index of the left menu down
@@ -63851,7 +63791,7 @@ function headerFooterBarDirective(isHeader) {
  * reach to trigger the on-infinite expression. Default: 1%.
  * @param {string=} spinner The {@link ionic.directive:ionSpinner} to show while loading. The SVG
  * {@link ionic.directive:ionSpinner} is now the default, replacing rotating font icons.
- * @param {string=} icon The icon to show while loading. Default: 'ion-load-d'.  This is depreicated
+ * @param {string=} icon The icon to show while loading. Default: 'ion-load-d'.  This is depreciated
  * in favor of the SVG {@link ionic.directive:ionSpinner}.
  * @param {boolean=} immediate-check Whether to check the infinite scroll bounds immediately on load.
  *
@@ -64110,11 +64050,7 @@ IonicModule
                      isDefined($attrs.uiSref);
       var isComplexItem = isAnchor ||
         //Lame way of testing, but we have to know at compile what to do with the element
-        // [Ionic 1.3.1]
-        // /ion-(delete|option|reorder)-button/i.test($element.html());
-        // [NEW - enable left/right swipe]
-        // presence of item-swipe-pane makes the ion-item complex too.
-        /ion-(delete|option|reorder)-button|item-swipe-pane/i.test($element.html());
+        /ion-(delete|option|reorder)-button/i.test($element.html());
 
       if (isComplexItem) {
         var innerElement = jqLite(isAnchor ? '<a></a>' : '<div></div>');
@@ -64313,9 +64249,9 @@ IonicModule.directive('ionOptionButton', [function() {
       return function($scope, $element, $attr, itemCtrl) {
         if (!itemCtrl.optionsContainer) {
           itemCtrl.optionsContainer = jqLite(ITEM_TPL_OPTION_BUTTONS);
-          itemCtrl.$element.append(itemCtrl.optionsContainer);
+          itemCtrl.$element.prepend(itemCtrl.optionsContainer);
         }
-        itemCtrl.optionsContainer.append($element);
+        itemCtrl.optionsContainer.prepend($element);
 
         itemCtrl.$element.addClass('item-right-editable');
 
@@ -65025,7 +64961,6 @@ IonicModule
  * @param {boolean=} no-tap-scroll By default, the navbar will scroll the content
  * to the top when tapped.  Set no-tap-scroll to true to disable this behavior.
  *
- * </table><br/>
  */
 IonicModule
 .directive('ionNavBar', function() {
@@ -65744,7 +65679,9 @@ IonicModule
 
         $scope.$on('scroll.refreshComplete', function() {
           $scope.$evalAsync(function() {
-            scrollCtrl.scrollView.finishPullToRefresh();
+            if(scrollCtrl.scrollView){
+              scrollCtrl.scrollView.finishPullToRefresh();
+            }
           });
         });
       }
@@ -65786,6 +65723,7 @@ IonicModule
  * @param {boolean=} paging Whether to scroll with paging.
  * @param {expression=} on-refresh Called on pull-to-refresh, triggered by an {@link ionic.directive:ionRefresher}.
  * @param {expression=} on-scroll Called whenever the user scrolls.
+ * @param {expression=} on-scroll-complete Called whenever the scrolling paging is completed.
  * @param {boolean=} scrollbar-x Whether to show the horizontal scrollbar. Default true.
  * @param {boolean=} scrollbar-y Whether to show the vertical scrollbar. Default true.
  * @param {boolean=} zooming Whether to support pinch-to-zoom
@@ -65821,6 +65759,7 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
           direction: '@',
           paging: '@',
           $onScroll: '&onScroll',
+          $onScrollComplete: '&onScrollComplete',
           scroll: '@',
           scrollbarX: '@',
           scrollbarY: '@',
@@ -65862,7 +65801,8 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
           maxZoom: $scope.$eval($scope.maxZoom) || 3,
           minZoom: $scope.$eval($scope.minZoom) || 0.5,
           preventDefault: true,
-          nativeScrolling: nativeScrolling
+          nativeScrolling: nativeScrolling,
+          scrollingComplete: onScrollComplete
         };
 
         if (isPaging) {
@@ -65870,10 +65810,17 @@ function($timeout, $controller, $ionicBind, $ionicConfig) {
           scrollViewOptions.bouncing = false;
         }
 
-        $controller('$ionicScroll', {
+        var scrollCtrl = $controller('$ionicScroll', {
           $scope: $scope,
           scrollViewOptions: scrollViewOptions
         });
+
+        function onScrollComplete() {
+          $scope.$onScrollComplete && $scope.$onScrollComplete({
+            scrollTop: scrollCtrl.scrollView.__scrollTop,
+            scrollLeft: scrollCtrl.scrollView.__scrollLeft
+          });
+        }
       }
     }
   };
@@ -66532,7 +66479,6 @@ function($animate, $timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $i
  * @ngdoc directive
  * @name ionSlides
  * @module ionic
- * @delegate ionic.service:$ionicSlideBoxDelegate
  * @restrict E
  * @description
  * The Slides component is a powerful multi-page container where each page can be swiped or dragged between.
@@ -66577,8 +66523,8 @@ function($animate, $timeout, $compile, $ionicSlideBoxDelegate, $ionicHistory, $i
  *
  * $scope.$on("$ionicSlides.slideChangeEnd", function(event, data){
  *   // note: the indexes are 0-based
- *   $scope.activeIndex = data.activeIndex;
- *   $scope.previousIndex = data.previousIndex;
+ *   $scope.activeIndex = data.slider.activeIndex;
+ *   $scope.previousIndex = data.slider.previousIndex;
  * });
  *
  * ```

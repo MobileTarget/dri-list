@@ -1,0 +1,14 @@
+<div class="list-container" ng-cloak>
+  <div ng-repeat="message in messageCtrl.messageList track by $index" ng-class="messageCtrl.checkClass(message);" class="messages" ng-cloak>
+    <div class="message" ng-cloak>
+      <span ng-cloak>
+          <a href="javascript:void(0);" ng-click="goToSechduleScreen(message, 'present');" ng-cloak>
+            {{ ::message.message }}
+            <strong ng-cloak>{{::message.annotation}}</strong>
+            <span ng-cloak class="scheduleMessage" ng-if="messageCtrl.doesMessageIsScheduled(message);"><i class="icon ion-clock"></i></span>
+      </a>
+      </span>
+      <div class="datetime" am-time-ago="message.date_created" ng-cloak></div>
+    </div>
+  </div>
+</div>

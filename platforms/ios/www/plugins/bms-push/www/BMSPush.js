@@ -1,4 +1,5 @@
-cordova.define("bms-push.BMSPush", function(require, exports, module) { /*
+cordova.define("bms-push.BMSPush", function(require, exports, module) {
+/*
     Copyright 2015 IBM Corp.
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -103,6 +104,15 @@ var BMSPush = function() {
 	this.registerNotificationsCallback = function(callback) {
 		cordova.exec(callback, failure, BMSPushClientString , "registerNotificationsCallback", []);
 	};
+
+	/**
+	 * [setNotificationStatusListener description]
+	 * 
+	 * @param callback [description]
+	 */
+	this.setNotificationStatusListener = function(callback) {
+    	cordova.exec(callback, failure, BMSPushClientString , "setNotificationStatusListener", []);
+    };
 };
 
 module.exports = new BMSPush();

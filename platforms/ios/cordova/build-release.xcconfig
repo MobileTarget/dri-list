@@ -28,4 +28,4 @@ CODE_SIGN_IDENTITY[sdk=iphoneos*] = iPhone Distribution
 
 #include "build-extras.xcconfig"
 
-#include "Pods/Target Support Files/Pods-Domenow/Pods-Domenow.release.xcconfig"
+#include "Pods/Target Support Files/Pods-Drilist/Pods-Drilist.release.xcconfig"
