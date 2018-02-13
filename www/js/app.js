@@ -1,21 +1,17 @@
 var DomenowApp = angular.module('DomenowApp', ['ionic', 'btford.socket-io', 'ngStorage', 'darthwade.dwLoading',
 	'ngTouch', 'ngCordova', 'itemSwipePaneDirective', 'ngTouchstart', 'angularMoment', 'chatacterCount', 'angular-timezone-selector', 'ion-datetime-picker', 'ion-datetime-picker', 'ngWebworker', 'ionic-native-transitions']);
 
-//defining App Constant
+//defining App Constant for development
 DomenowApp.constant('APIROOT', 'https://dev-platform.mybluemix.net');
-//DomenowApp.constant('SOCKET_ROOT', 'https://socket-server.mybluemix.net');
-//DomenowApp.constant('SOCKET_ROOT', 'http://mastersoftwaretechnologies.com:6050');
-//definfing app root run funtion which will invoke at very first.
+DomenowApp.constant('SOCKET_ROOT', 'http://mastersoftwaretechnologies.com:9028');
 
-
-//app devlopment constants
-//DomenowApp.constant('APIROOT', 'https://test-platformapp.mybluemix.net');
-DomenowApp.constant('SOCKET_ROOT', 'http://mastersoftwaretechnologies.com:6050');
+//defining App Constant for live
+// DomenowApp.constant('APIROOT', 'https://live-platformapp.mybluemix.net');
+// DomenowApp.constant('SOCKET_ROOT', 'http://mastersoftwaretechnologies.com:9028');
 
 DomenowApp.config(function($ionicConfigProvider, $ionicNativeTransitionsProvider){
   //enabling native scrolling;
   $ionicConfigProvider.scrolling.jsScrolling(false);
-                  
   $ionicNativeTransitionsProvider.setDefaultOptions({
         duration: 400, // in milliseconds (ms), default 400, 
         slowdownfactor: 4, // overlap views (higher number is more) or no overlap (1), default 4 
@@ -84,7 +80,7 @@ DomenowApp.run(function ($ionicPlatform, BluemixService, $window, $http, $localS
     //registering user to socket server if user is valid and have access_token in our local.
     //if($localStorage.access_token) SocketBroadCastEvents.onAppStart("called from app.js file");
     
-		/**
+	/**
      *  Following event are IonicPlatform events and are
      *  trigrred when app is paused or resumed. This following events
      *  are used to inform socket-server that user is online or offline.
@@ -106,48 +102,15 @@ DomenowApp.run(function ($ionicPlatform, BluemixService, $window, $http, $localS
       SocketBroadCastEvents.getUpdatedPageIds($localStorage.deviceFingerPrint, $localStorage.user_id);  
     }, 1500);
     
-    /** puttin all templates into templateCache on apprun functino **/
-    $templateRequest('angular-templates/userMessageList.html').then(function(template){
-			$templateCache.put("/cachedUserMessageTemplate.html", template);
+    /** puttin all templates into templateCache on apprun function **/
+    $templateRequest('angular-templates/template_screen.html').then(function(template){
+			$templateCache.put("/cachedTemplateScreen.html", template);
 		});
-		
-		$templateRequest('angular-templates/companyMessageList.html').then(function(template){
-			$templateCache.put("/cachedCompanyMessageTemplate.html", template);
-		});
+		//
+		//$templateRequest('angular-templates/companyMessageList.html').then(function(template){
+		//	$templateCache.put("/cachedCompanyMessageTemplate.html", template);
+		//});
 	});
-               
-    $rootScope.$on('$cordovaLocalNotification:schedule',
-        function (event, notification, state) {
-        console.log("SCHEDULE");
-        console.log('event', event);
-        console.log('notification', notification);
-        console.log('state', state);
-    });
-               
-    $rootScope.$on('$cordovaLocalNotification:trigger',
-        function (event, notification, state) {
-        console.log("TRIGGER");
-        console.log('event', event);
-        console.log('notification', notification);
-        console.log('state', state);
-    });
-               
-    $rootScope.$on('$cordovaLocalNotification:update',
-        function (event, notification, state) {
-        console.log('UPDATE');
-        console.log('event', event);
-        console.log('notification', notification);
-        console.log('state', state);
-    });
-               
-    $rootScope.$on('$cordovaLocalNotification:cancel',
-        function (event, notification, state) {
-        console.log('CANCEL');
-        console.log('event', event);
-        console.log('notification', notification);
-        console.log('state', state);
-    });
-            
 });
 
 

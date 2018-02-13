@@ -1,8 +1,10 @@
-<div class="user-msg-container">
-  <div ng-repeat="message in userMessageCtrl.messages track by $index" ng-class="userMessageCtrl.checkClass(message);" class="messages" ng-if="userMessageCtrl.futureMessage(message);">
-      <div class="message" >
-        <span >{{ ::message.message }}</span>
-        <div class="datetime" am-time-ago="message.date_created"></div>
+<div class="user-msg-container" ng-cloak>
+  <div ng-repeat="message in userMessageCtrl.messages track by $index" ng-class="userMessageCtrl.checkClass(message);" class="messages" ng-if="userMessageCtrl.futureMessage(message);" on-swipe-up="swipeUpEvent($index);" ng-cloak>
+      <div class="message" ng-cloak>
+        <span ng-cloak>{{ message.message }}</span>
+        <div class="datetime" am-time-ago="message.date_created" ng-cloak></div>
       </div>
   </div>
 </div>
+
+

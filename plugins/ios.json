@@ -7,43 +7,49 @@
         "files": {}
     },
     "installed_plugins": {
-        "bms-push": {
-            "PACKAGE_NAME": "com.dri.dome"
-        },
         "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.dri.dome"
+            "PACKAGE_NAME": "io.ionic.starter"
         },
         "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.dri.dome"
-        },
-        "cordova-plugin-dialogs": {
-            "PACKAGE_NAME": "com.dri.dome"
-        },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "com.dri.dome"
+            "PACKAGE_NAME": "io.ionic.starter"
         },
         "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.dri.dome"
+            "PACKAGE_NAME": "io.ionic.starter"
         },
         "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.dri.dome"
+            "PACKAGE_NAME": "io.ionic.starter"
         },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.dri.dome"
+            "PACKAGE_NAME": "io.ionic.starter"
         },
         "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.dri.dome"
+            "PACKAGE_NAME": "io.ionic.starter"
         },
-        "bms-core": {
-            "PACKAGE_NAME": "com.dri.dome"
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "io.ionic.starter"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.ionicframework.drilist110445"
+        },
+        "bms-push": {
+            "PACKAGE_NAME": "com.ionicframework.drilist110445"
+        },
+        "de.appplant.cordova.plugin.local-notification": {
+            "PACKAGE_NAME": "com.ionicframework.drilist110445"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-cocoapod-support": {
-            "PACKAGE_NAME": "com.dri.dome"
+            "PACKAGE_NAME": "com.ionicframework.drilist110445"
         },
         "cordova-plugin-add-swift-support": {
-            "PACKAGE_NAME": "com.dri.dome"
+            "PACKAGE_NAME": "com.ionicframework.drilist110445"
+        },
+        "bms-core": {
+            "PACKAGE_NAME": "com.ionicframework.drilist110445"
+        },
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "com.ionicframework.drilist110445"
         }
     }
 }

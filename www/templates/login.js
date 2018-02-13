@@ -59,3 +59,12 @@ $scope.checkNumber = function(){
 		}
 	}
 };
+
+
+
+
+
+
+
+
+

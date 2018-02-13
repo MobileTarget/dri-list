@@ -1,0 +1,58 @@
+<section class="template-root">
+    <!-- following html code is used to render end-user message screen -->
+    <div class="end-user-message-screen" ng-if="ctrl.pageType == 'endUserScreen'" ng-cloak>
+        <div class="user-msg-container" ng-cloak>
+            <div ng-repeat="message in ctrl.messages track by $index" ng-class="ctrl.checkClass(message);" class="messages" ng-if="ctrl.futureMessage(message);" on-swipe-up="swipeUpEvent($index);" ng-cloak>
+                <div class="message" ng-cloak>
+                  <span ng-cloak>{{ message.message }}</span>
+                  <div class="datetime" am-time-ago="message.date_created" ng-cloak></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- following html code is used to render operator/company message screens -->
+    <div class="operator-message-screen" ng-if="ctrl.pageType == 'companyOperatorScreen'" ng-cloak>
+        <div class="list-container" ng-cloak>
+            <div ng-repeat="message in ctrl.messageList track by $index" ng-class="ctrl.checkClass(message);" class="messages" on-swipe-up="swipeUpEvent($index);" ng-cloak>
+              <div class="message" ng-cloak>
+                <span ng-cloak>
+                    <a href="javascript:void(0);" ng-click="goToSechduleScreen(message, 'present');" ng-cloak>
+                      {{ message.message }}
+                      <strong ng-cloak>{{ message.annotation }}</strong>
+                      <span ng-cloak class="scheduleMessage" ng-if="ctrl.doesMessageIsScheduled(message);"><i class="icon ion-clock"></i></span>
+                    </a>
+                </span>
+                <div class="datetime" am-time-ago="message.date_created" ng-cloak></div>
+              </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- following html code is used for both category and sub_category screen rendering. -->
+    <div class="category-screens" ng-if="(ctrl.pageType == 'subCategoryScreen') || (ctrl.pageType == 'categoryScreen')" ng-cloak>
+        <ion-list can-swipe="true">
+                <ion-item ng-repeat="item in ctrl.details" type="item-text-wrap">
+                    <div class="item-data" ng-click="ctrl.subDetails(item)">
+                        <h2>{{item.name}}</h2>
+                        <i class="icon icon-accessory">
+                            <span class="badge badge-assertive icon-badge">{{item.active}} / {{item.unread}}</span>
+                        </i>
+                    </div>
+                    <ion-option-button class="button-calm icon ion-edit" ng-click="ctrl.editDetails(item)"></ion-option-button>
+                    <ion-option-button class="button-assertive icon ion-trash-a" ng-click="params = { app: { api: { api_type: 'delete_detail', table: 'delete_detail', table_data:	{ id:	item.id }}	},platform: {},other_user: {}};ctrl.requestHandler(params);"></ion-option-button>
+                    <ion-option-button class="button-balanced icon ion-more" ng-click="ctrl.moreDetails(item)" ng-show="isAdmin"></ion-option-button>
+                </ion-item>
+        </ion-list>
+    </div>
+    
+    <!-- oldMessage screen template starts from here-- which is currently not in used --->
+    <div class="old-message-screen" ng-if="ctrl.pageType == 'oldMessageScreen'" ng-cloak>
+        <div ng-repeat="message in messages" ng-class="{other: message.type != myMsgTypeStr}" class="messages" ng-if="message.message">
+            <div class="message">
+                <p class="chat-typing" ng-show="message.message==typingStateStr">{{message.username}}</p>
+                <span >{{ message.message }}</span>
+            </div>
+        </div>
+    </div>
+</section>

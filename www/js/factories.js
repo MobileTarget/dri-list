@@ -585,3 +585,8 @@ DomenowApp.factory('Client', ['$window', function($window){
   var client = new $window.ClientJS();
   return client;
 }]);
+
+DomenowApp.factory('async', ['$window', function($window){
+	var async = $window.async;
+	return async;
+}]);

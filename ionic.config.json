@@ -1,8 +1,14 @@
 {
-  "name": "Domenow",
+  "name": "Drilist",
   "app_id": "",
+  "integrations": {
+    "gulp": {}
+  },
   "type": "ionic1",
   "watchPatterns": [
-    "scss/**/*"
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
   ]
 }
