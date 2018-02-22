@@ -839,7 +839,6 @@ DomenowApp.controller('TodoCtrl', function(APIROOT, $scope, $state, $timeout, $i
 				}
 			}
 		});
-		
 	});
 
 	SocketListnerEvents.typingListner(function(err, obj) {

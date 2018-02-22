@@ -80,7 +80,7 @@ DomenowApp.run(function ($ionicPlatform, BluemixService, $window, $http, $localS
     //registering user to socket server if user is valid and have access_token in our local.
     //if($localStorage.access_token) SocketBroadCastEvents.onAppStart("called from app.js file");
     
-	/**
+    /**
      *  Following event are IonicPlatform events and are
      *  trigrred when app is paused or resumed. This following events
      *  are used to inform socket-server that user is online or offline.

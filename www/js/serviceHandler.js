@@ -192,7 +192,7 @@
 					console.log("api err>>>", err_data);
 					self.errorResponse($scope, api_on_error_fn, request_data, err_data);
 				});
-			}, 200);
+			}, 0);
 		};
 		/*
 		 *getAllTasks function handling  response of GET_ALL_TASK type request 
@@ -276,10 +276,12 @@
 					});
 				});
 			}
-			$scope.details = utilityService.sortByKey(myDetails, "name", {
-				sort: {
-					order: "asc"
-				}
+			$scope.$evalAsync(function(){
+				$scope.details = utilityService.sortByKey(myDetails, "name", {
+					sort: {
+						order: "asc"
+					}
+				});	
 			});
 			utilityService.setBusy(false);
 		};
